@@ -1,14 +1,12 @@
 package tw.yen.spring.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+//import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -29,7 +27,7 @@ public class UserInfo {
 	private Integer role;   // 職務權限設定
 	@Column(name="status")
 	private Integer status;
-	@Column(name="company_id" , insertable = false, updatable = false)  // 唯讀，以免hibernate報錯
+	@Column(name="company_id", nullable = true)
 	private Long cId;
 	
 	
@@ -84,19 +82,5 @@ public class UserInfo {
 		this.cId = cId;
 	}
 	
-	
-	// 多對一
-	@ManyToOne
-	@JoinColumn(name="company_id", nullable = false)
-	@JsonBackReference
-	private CompanyInfo companyId;
-
-
-	public CompanyInfo getCompanyId() {
-		return companyId;
-	}
-	public void setCompanyId(CompanyInfo companyId) {
-		this.companyId = companyId;
-	}
 	
 }

@@ -1,5 +1,9 @@
 package tw.yen.spring.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -7,53 +11,32 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import lombok.AllArgsConstructor;
 import tw.yen.spring.dto.RegistrationRequest;
-import tw.yen.spring.entity.CompanyInfo;
-import tw.yen.spring.entity.UserInfo;
-import tw.yen.spring.service.CompanyInfoService;
-import tw.yen.spring.service.UserInfoService;
-
+import tw.yen.spring.service.RegistrationService;
 
 
 @RestController
 @RequestMapping("/api/register")
-@AllArgsConstructor
 public class RegistrationController {
+
+	private final RegistrationService registrationService;
 	
-	private final CompanyInfoService companyService;
-	private final UserInfoService userService;
-	
-	public RegistrationController(CompanyInfoService companyService, UserInfoService userService) {
-		this.companyService = companyService;
-		this.userService = userService;
+	public RegistrationController(RegistrationService registrationService) {
+		this.registrationService = registrationService;
 	}
+	
 	
 	@PostMapping
 	@Transactional
-	public ResponseEntity<String> register(@RequestBody RegistrationRequest request) {
-		// 新增公司
-		CompanyInfo company = new CompanyInfo();
-		company.setcName(request.getcName());
-		company.setTaxId(request.getTaxId());
-		company.setrName(request.getrName());
-		company.setrTel(request.getrTel());
-		company.setrEmail(request.getuEmail());
-
-		CompanyInfo savedCompany = companyService.save(company); ;
-
+	public ResponseEntity<Map<String, String>> EmailVerified(@RequestBody RegistrationRequest request) {	
 		
-		// 新增User
-		UserInfo user = new UserInfo();
-		user.setuAccount(request.getuAccount() );
-		user.setuEmail(request.getuEmail());
-		user.setuPassword(UserInfoService.encodePassowrd(request.getPassword()));
-		user.setStatus(request.getStatus());
-		user.setRole(request.getRole());
-		user.setCompanyId(savedCompany);  //companyId
-		userService.save(user);
+		registrationService.register(request);
+				
+		Map<String, String> res = new HashMap<>();
+		res.put("status", "0");
+		res.put("message", "註冊成功，請查收驗證信。");
 		
-		return ResponseEntity.ok("註冊成功");
+		return ResponseEntity.status(HttpStatus.CREATED).body(res);
 	}
 	
 }

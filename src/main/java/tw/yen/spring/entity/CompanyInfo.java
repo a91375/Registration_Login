@@ -2,8 +2,6 @@ package tw.yen.spring.entity;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -66,9 +64,9 @@ public class CompanyInfo {
 			this.rEmail = rEmail;
 		}
 		
+		
 		// 一對多
-		@OneToMany(mappedBy = "companyId")
-		@JsonManagedReference
+		@OneToMany(mappedBy = "cId")
 		private List<UserInfo> users;
 
 		
