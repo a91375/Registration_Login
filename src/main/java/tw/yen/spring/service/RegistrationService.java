@@ -7,10 +7,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import tw.yen.spring.dto.request.RegistrationRequest;
 import tw.yen.spring.entity.CompanyInfo;
 import tw.yen.spring.entity.ConfirmationTokens;
 import tw.yen.spring.entity.UserInfo;
+import tw.yen.spring.payload.request.RegistrationRequest;
 import tw.yen.spring.security.enums.Role;
 
 @Service
