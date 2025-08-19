@@ -7,7 +7,7 @@ import tw.yen.spring.repository.UserInfoRepository;
 import tw.yen.spring.utils.BCrypt;
 
 @Service
-public class UserInfoService{
+public class UserInfoService {
 
 	private final UserInfoRepository userRespository;
 	// private String encodedPassword;

@@ -7,10 +7,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import tw.yen.spring.dto.RegistrationRequest;
+import tw.yen.spring.dto.request.RegistrationRequest;
 import tw.yen.spring.entity.CompanyInfo;
 import tw.yen.spring.entity.ConfirmationTokens;
 import tw.yen.spring.entity.UserInfo;
+import tw.yen.spring.security.enums.Role;
 
 @Service
 public class RegistrationService {
@@ -52,7 +53,9 @@ public class RegistrationService {
 		user.setuAccount(request.getuAccount() );
 		user.setuPassword(UserInfoService.encodePassowrd(request.getPassword()));
 		user.setStatus(request.getStatus());
-		user.setRole(request.getRole());
+		String roleStr = request.getRole();
+		Role role = Role.valueOf(roleStr.toUpperCase());
+		user.setRole(role);
 		//user.setcId(savedCompany.getId()); 
 		UserInfo savedUser = userService.save(user);
 		

@@ -1,4 +1,4 @@
-package tw.yen.spring.dto;
+package tw.yen.spring.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -18,7 +18,7 @@ public class RegistrationRequest {
  */
 	private String uEmail;
 	private String password;
-	private Integer role;
+	private String role;
 	private Integer status;
 	
 	
@@ -74,10 +74,10 @@ public class RegistrationRequest {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public Integer getRole() {
+	public String getRole() {
 		return role;
 	}
-	public void setRole(Integer role) {
+	public void setRole(String role) {
 		this.role = role;
 	}
 	public Integer getStatus() {
