@@ -3,30 +3,30 @@ package tw.yen.spring.service;
 
 import java.time.LocalDateTime;
 
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import lombok.RequiredArgsConstructor;
 import tw.yen.spring.entity.CompanyInfo;
 import tw.yen.spring.entity.ConfirmationTokens;
 import tw.yen.spring.entity.UserInfo;
 import tw.yen.spring.payload.request.RegistrationRequest;
 import tw.yen.spring.security.enums.Role;
+import tw.yen.spring.security.service.JwtService;
+import tw.yen.spring.security.service.RefreshTokenService;
 
 @Service
+@RequiredArgsConstructor
 public class RegistrationService {
 	private final CompanyInfoService companyService;
 	private final UserInfoService userService;
 	private final EmailService emailService;
 	private final ConfirmationTokenService tokenService;
+	private final JwtService jwtService;
+	private final RefreshTokenService refreshTokenService;
 	
-	public RegistrationService(CompanyInfoService companyService, UserInfoService userService, ConfirmationTokenService tokenService,
-			EmailService emailService) {
-		this.companyService = companyService;
-		this.userService = userService;
-		this.tokenService = tokenService;
-		this.emailService = emailService;
-	}
 	
 	@Transactional
 	public String register(@RequestBody RegistrationRequest request) {
@@ -69,8 +69,10 @@ public class RegistrationService {
 		cToken.setExpiresAt(LocalDateTime.now().plusMinutes(60));  // 設定60分鐘後token過期
 		cToken.setUserId(savedUser.getId());
 		tokenService.saveToken(cToken);
-		
+        
 		return token;
 	}
+	
+	
 
 }

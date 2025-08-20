@@ -36,7 +36,6 @@ public class EmailController {
 			emailService.assignCompany(uEmail);
 			
 			return "驗證成功!";
-			
 		}else {
 			 return "驗證失敗或連結已失效";
 		}
