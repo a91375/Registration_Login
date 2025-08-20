@@ -10,8 +10,8 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public enum Role {
-	Admin(Set.of("READ_PROFILE", "MANAGE_USERS", "VIEW_REPORTS")),
-	User(Set.of("READ_PROFILE", "MANAGE_USERS"));
+	ADMIN(Set.of("READ_PROFILE", "MANAGE_USERS", "VIEW_REPORTS")),
+	USER(Set.of("READ_PROFILE", "MANAGE_USERS"));
 	
 	@Getter
     private final Set<String> permissions;
