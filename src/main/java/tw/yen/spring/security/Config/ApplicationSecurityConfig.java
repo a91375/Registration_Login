@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import tw.yen.spring.repository.UserInfoRepository;
 import tw.yen.spring.security.CustomUserDetails;
+import tw.yen.spring.security.CustomUserDetailsService;
 
 @Configuration
 @EnableWebSecurity
@@ -33,12 +34,17 @@ public class ApplicationSecurityConfig {
 	}
 
 	@Bean
-	public AuthenticationProvider authenticationProvider(UserDetailsService userDetailsService,
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+	
+	@Bean
+	public AuthenticationProvider authenticationProvider(CustomUserDetailsService userDetailsService,
 	                                                     PasswordEncoder passwordEncoder) {
-		DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userDetailsService);
-        authProvider.setPasswordEncoder(passwordEncoder);
-        return authProvider;
+	    DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+	    authProvider.setUserDetailsService(userDetailsService);
+	    authProvider.setPasswordEncoder(passwordEncoder);
+	    return authProvider;
 	}
 	
 	@Bean
@@ -46,9 +52,5 @@ public class ApplicationSecurityConfig {
         return config.getAuthenticationManager();
     }
 	
-	@Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
 	
 }

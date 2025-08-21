@@ -4,7 +4,6 @@ import org.springframework.stereotype.Service;
 
 import tw.yen.spring.entity.UserInfo;
 import tw.yen.spring.repository.UserInfoRepository;
-import tw.yen.spring.utils.BCrypt;
 
 @Service
 public class UserInfoService {
@@ -18,11 +17,6 @@ public class UserInfoService {
 	
 	boolean userExists(String uEmail) {
 		return userRespository.findByUEmail(uEmail).isPresent();
-	}
-	
-	public static String encodePassowrd(String rawPassword) {
-		String encodedPassword= BCrypt.hashpw(rawPassword, BCrypt.gensalt());
-		return encodedPassword;
 	}
 	
 	public UserInfo save(UserInfo userInfo) {

@@ -1,27 +1,36 @@
 package tw.yen.spring.security;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import lombok.RequiredArgsConstructor;
+import tw.yen.spring.entity.UserInfo;
 import tw.yen.spring.repository.UserInfoRepository;
 
-@Service
+@Service 
+@RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
 
 	private final UserInfoRepository userRepository;
+	private static final Logger log = LoggerFactory.getLogger(CustomUserDetailsService.class);
 	
-	public CustomUserDetailsService(UserInfoRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 	
 	@Override
-    public UserDetails loadUserByUsername(String email) {
-		return userRepository.findByUEmail(email)
-                .map(CustomUserDetails::new)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + email));
-
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+		log.info("Login attempt: {}, rawPassword from request = {}", email);
+		
+		UserInfo user = userRepository.findByUEmail(email)
+				.orElseThrow(() -> new UsernameNotFoundException("User not found" + email));
+		
+		
+		return new CustomUserDetails(user);
+		
     }
 	
 }

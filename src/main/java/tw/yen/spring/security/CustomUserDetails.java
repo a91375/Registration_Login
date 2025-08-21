@@ -1,11 +1,8 @@
 package tw.yen.spring.security;
 
 import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import tw.yen.spring.entity.UserInfo;
@@ -29,7 +26,7 @@ public class CustomUserDetails implements UserDetails {
     
     @Override
     public String getUsername() {
-        return user.getuAccount();
+        return user.getuEmail();
     }
     
     @Override

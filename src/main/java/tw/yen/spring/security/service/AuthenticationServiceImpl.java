@@ -1,22 +1,24 @@
 package tw.yen.spring.security.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import lombok.RequiredArgsConstructor;
-import tw.yen.spring.entity.UserInfo;
 import tw.yen.spring.payload.request.AuthenticationRequest;
-import tw.yen.spring.payload.request.RegistrationRequest;
 import tw.yen.spring.payload.response.AuthenticationResponse;
 import tw.yen.spring.repository.UserInfoRepository;
 import tw.yen.spring.security.CustomUserDetails;
+import tw.yen.spring.security.CustomUserDetailsService;
 import tw.yen.spring.security.enums.TokenType;
 
-@Service
+@Service 
 @RequiredArgsConstructor
 @Transactional
 public class AuthenticationServiceImpl implements AuthenticationService {
@@ -25,6 +27,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 	    private final UserInfoRepository userRepository;
 	    private final AuthenticationManager authenticationManager;
 	    private final RefreshTokenService refreshTokenService;
+	    private static final Logger log = LoggerFactory.getLogger(AuthenticationServiceImpl.class);
 	    
 	    // 產生 JWT access token & Refresh Token
 	    @Override
@@ -32,11 +35,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 	    	// Spring Security 驗證帳號密碼
 	    	authenticationManager.authenticate(
 	        		new UsernamePasswordAuthenticationToken(
-	        				request.getEmail(),
+	        				request.getUEmail(),
 	        				request.getPassword()
 	        ));
+	    	log.info("Login request: email={}, rawPassword={}", request.getUEmail(), request.getPassword());   
 	    	// 查詢使用者
-	        var user = userRepository.findByUEmail(request.getEmail()).orElseThrow(() -> 
+	        var user = userRepository.findByUEmail(request.getUEmail()).orElseThrow(() -> 
 	        						new IllegalArgumentException("Invalid email or password."));
 	        // 檢查帳號狀態 (避免未啟用帳號登入)
 	        if (user.getStatus() == null || user.getStatus() == 0) {
@@ -51,7 +55,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 	                .map(GrantedAuthority::getAuthority)
 	                .toList();
 	        
-	        return AuthenticationResponse.builder()
+	         return AuthenticationResponse.builder()
 	                .accessToken(jwt)
 	                .email(user.getuEmail())
 	                .id(user.getId())
@@ -60,5 +64,5 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 	                .tokenType( TokenType.BEARER.name())
 	                .build();
 	    }
-
+	    
 }

@@ -3,7 +3,7 @@ package tw.yen.spring.service;
 
 import java.time.LocalDateTime;
 
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,18 +14,15 @@ import tw.yen.spring.entity.ConfirmationTokens;
 import tw.yen.spring.entity.UserInfo;
 import tw.yen.spring.payload.request.RegistrationRequest;
 import tw.yen.spring.security.enums.Role;
-import tw.yen.spring.security.service.JwtService;
-import tw.yen.spring.security.service.RefreshTokenService;
 
 @Service
 @RequiredArgsConstructor
 public class RegistrationService {
+	private final PasswordEncoder passwordEncoder;
 	private final CompanyInfoService companyService;
 	private final UserInfoService userService;
 	private final EmailService emailService;
 	private final ConfirmationTokenService tokenService;
-	private final JwtService jwtService;
-	private final RefreshTokenService refreshTokenService;
 	
 	
 	@Transactional
@@ -51,7 +48,7 @@ public class RegistrationService {
 		UserInfo user = new UserInfo();
 		user.setuEmail(request.getuEmail());
 		user.setuAccount(request.getuAccount() );
-		user.setuPassword(UserInfoService.encodePassowrd(request.getPassword()));
+		user.setuPassword(passwordEncoder.encode(request.getPassword()));
 		user.setStatus(request.getStatus());
 		String roleStr = request.getRole();
 		Role role = Role.valueOf(roleStr.toUpperCase());
