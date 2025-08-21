@@ -32,7 +32,7 @@ public class EmailController {
 		if (updateRows > 0) {
 			String uEmail = confirmationTokenService.getUEmail(token);
 			userService.enableUser(uEmail); 
-			emailService.assignCompany(uEmail);
+			 emailService.assignCompany(uEmail, token);
 			
 			return "驗證成功!";
 		}else {
@@ -41,5 +41,4 @@ public class EmailController {
 		
 	}
 
-	
 }
