@@ -12,4 +12,24 @@ spring.jpa.show-sql=true
 spring.jpa.properties.hibernate.format_sql=true
 spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL8Dialect
 
+#SMTP(mailtrap)
+spring.mail.host=sandbox.smtp.mailtrap.io
+spring.mail.port=2525
+spring.mail.username=64496e09717d2f
+spring.mail.password=40f89745d9d350
 
+#是否使用驗證 & TLS
+spring.mail.properties.mail.smtp.auth=true
+spring.mail.properties.mail.smtp.starttls.enable=true
+spring.mail.properties.mail.smtp.starttls.required=true
+#spring.jpa.properties.hibernate.id.new_generator_mappings=false
+
+#JWT
+application.security.jwt.secret-key=96d90e27891e4c6f8f44359cbe28741c76e8a0fcd16f46f59a1e8db10fcbd82e
+#實務會另設在環境變數以提高安全性
+application.security.jwt.expiration=900000
+application.security.jwt.cookie-name=jwt-cookie
+application.security.jwt.refresh-token.expiration=1296000000
+application.security.jwt.refresh-token.cookie-name=refresh-jwt-cookie
+logging.level.root=INFO
+logging.level.org.springframework.security=DEBUG
