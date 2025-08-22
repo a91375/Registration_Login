@@ -2,8 +2,6 @@ package tw.yen.spring.security;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -23,11 +21,10 @@ public class CustomUserDetailsService implements UserDetailsService {
 	
 	@Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-		log.info("Login attempt: {}, rawPassword from request = {}", email);
+		//log.info("Login attempt: {}, rawPassword from request = {}", email);
 		
 		UserInfo user = userRepository.findByUEmail(email)
 				.orElseThrow(() -> new UsernameNotFoundException("User not found" + email));
-		
 		
 		return new CustomUserDetails(user);
 		

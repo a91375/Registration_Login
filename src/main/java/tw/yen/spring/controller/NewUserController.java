@@ -6,7 +6,6 @@ import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +16,7 @@ import tw.yen.spring.payload.request.NewUserRequest;
 import tw.yen.spring.service.NewUserService;
 
 @RestController
-@RequestMapping("/api/user/new")
+@RequestMapping("/api/user/create")
 @RequiredArgsConstructor
 public class NewUserController {
 	private final NewUserService newUserService;
