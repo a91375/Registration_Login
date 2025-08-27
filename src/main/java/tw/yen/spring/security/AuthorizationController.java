@@ -19,7 +19,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 public class AuthorizationController {
 	@GetMapping("/admin/resource")
     @PreAuthorize("hasAuthority('READ_PRIVILEGE') and hasRole('ADMIN')")
-  /*
+ /* 
 	@Operation(
             description = "This endpoint require a valid JWT, ADMIN role with READ_PRIVILEGE",
             summary = "Hello secured endpoint",

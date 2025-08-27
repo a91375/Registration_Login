@@ -70,8 +70,10 @@ public class AuthenticationController {
         ResponseCookie jwtCookie = jwtService.generateJwtCookie(authenticationResponse.getAccessToken());
         ResponseCookie refreshTokenCookie = refreshTokenService.generateRefreshTokenCookie(authenticationResponse.getRefreshToken());
         return ResponseEntity.ok()
-                .header(HttpHeaders.SET_COOKIE,jwtCookie.toString())
-                .header(HttpHeaders.SET_COOKIE,refreshTokenCookie.toString())
+        		.headers(h -> {
+                    h.add(HttpHeaders.SET_COOKIE, jwtCookie.toString());
+                    h.add(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString());
+                })
                 .body(authenticationResponse);
     }
     /* 新accessToken 用body傳到前端，安全性低
