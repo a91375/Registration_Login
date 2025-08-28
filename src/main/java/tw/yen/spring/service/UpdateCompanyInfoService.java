@@ -15,6 +15,7 @@ import tw.yen.spring.entity.UserInfo;
 import tw.yen.spring.exception.NotFoundException;
 import tw.yen.spring.payload.request.UpdateCompanyInfoRequest;
 import tw.yen.spring.payload.response.ApiResponse;
+import tw.yen.spring.payload.response.CompanyInfoResponse;
 import tw.yen.spring.repository.CompanyInfoRespository;
 import tw.yen.spring.repository.UserInfoRepository;
 import tw.yen.spring.security.CustomUserDetails;
@@ -28,7 +29,7 @@ public class UpdateCompanyInfoService {
 	
 	@Transactional
 	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<ApiResponse> companyUpdate(UpdateCompanyInfoRequest request) {
+	public ApiResponse<?> companyUpdate(UpdateCompanyInfoRequest request) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		UserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
 		UserInfo user = userRepository.findByUEmail(userDetails.getUsername())
@@ -42,7 +43,28 @@ public class UpdateCompanyInfoService {
 		if (request.getREmail() != null) company.setrEmail(request.getREmail());
 		companyRepository.save(company);
 		        
-		return ResponseEntity.ok(ApiResponse.success("資料更新成功！"));
+		return ApiResponse.success("資料更新成功！");
 	}
+	
+	@Transactional(readOnly = true)
+    public ApiResponse<CompanyInfoResponse> getCompanyInfo() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        UserInfo user = userRepository.findByUEmail(userDetails.getUsername())
+                .orElseThrow(() -> new NotFoundException("找不到使用者"));
+        CompanyInfo company = companyRepository.findById(user.getcId())
+                .orElseThrow(() -> new NotFoundException("找不到公司資料"));
+	
+        CompanyInfoResponse response = new CompanyInfoResponse(
+                company.getcName(),
+                company.getTaxId(),
+                company.getrName(),
+                company.getrTel(),
+                company.getrEmail()
+        );
+        
+        return ApiResponse.success("公司資料取得成功", response);
+	}
+	
 	
 }	
