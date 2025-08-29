@@ -12,20 +12,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
-import tw.yen.spring.payload.request.NewUserRequest;
-import tw.yen.spring.service.NewUserService;
+import tw.yen.spring.payload.request.AddUserRequest;
+import tw.yen.spring.service.AddUserService;
 
 @RestController
 @RequestMapping("/api/user/create")
 @RequiredArgsConstructor
-public class NewUserController {
-	private final NewUserService newUserService;
+public class AddUserController {
+	private final AddUserService addUserService;
 	
 	@PostMapping
 	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<Map<String, String>> EmailVerified(@RequestBody NewUserRequest request) {	
+	public ResponseEntity<Map<String, String>> EmailVerified(@RequestBody AddUserRequest request) {	
 		
-		newUserService.newUser(request);
+		addUserService.newUser(request);
 				
 		Map<String, String> res = new HashMap<>();
 		res.put("status", "0");

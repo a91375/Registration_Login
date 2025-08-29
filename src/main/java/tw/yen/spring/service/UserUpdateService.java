@@ -32,14 +32,14 @@ public class UserUpdateService {
 	
 	@Transactional
 	@PreAuthorize("hasRole('USER')")
-	public ResponseEntity<ApiResponse> userUpdate(UpdateUserRequest request) {
+	public ResponseEntity<ApiResponse<?>> userUpdate(UpdateUserRequest request) {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		UserDetails user = (CustomUserDetails) authentication.getPrincipal();
 		String uEmail = user.getUsername();
-		
 		UserInfo newUser = userRepository.findByUEmail(uEmail)
                 .orElseThrow(() -> new NotFoundException("找不到目標使用者：" + uEmail));
+		
 		newUser.setuAccount(request.getUAccount() );
 		newUser.setStatus(request.getStatus());
 		
@@ -50,7 +50,7 @@ public class UserUpdateService {
 	
 	@Transactional
 	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<ApiResponse> userUpdateByAdmin(UpdateUserByAdminRequest request) {
+	public ResponseEntity<ApiResponse<?>> userUpdateByAdmin(UpdateUserByAdminRequest request) {
 		
 		UserInfo newUser = userRepository.findByUEmail(request.getTEmail())
                 .orElseThrow(() -> new NotFoundException("找不到目標使用者：" + request.getTEmail()));
@@ -67,7 +67,7 @@ public class UserUpdateService {
 	
 	@Transactional
 	@PreAuthorize("hasAnyRole('USER','ADMIN')")
-	public ResponseEntity<ApiResponse> passwordUpdate(UpdatePasswordRequest request) {
+	public ResponseEntity<ApiResponse<?>> passwordUpdate(UpdatePasswordRequest request) {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		UserDetails user = (CustomUserDetails) authentication.getPrincipal();
@@ -82,7 +82,7 @@ public class UserUpdateService {
 		if (!passwordEncoder.matches(oldPassword, newUser.getuPassword())) {
 			throw new PasswordUpdateException("舊密碼錯誤");
 		}
-		if (!newPassword.equals(oldPassword)) {
+		if (newPassword.equals(oldPassword)) {
 			throw new PasswordUpdateException("新密碼不可與舊密碼重複");
 		}
 		if(!checkPassword.equals(newPassword)) {
@@ -94,5 +94,6 @@ public class UserUpdateService {
 		        
 		return ResponseEntity.ok(ApiResponse.success("密碼更新成功！"));
 	}
+
 	
 }

@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class NewUserRequest {
+public class AddUserRequest {
 	@NotBlank(message = "account is required")
 	@Size(min = 4, max = 20, message = "account length must be between 4 and 20 characters")
 	@JsonProperty("uAccount")

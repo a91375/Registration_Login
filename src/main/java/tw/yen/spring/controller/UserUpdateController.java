@@ -21,17 +21,17 @@ public class UserUpdateController {
 	private final UserUpdateService updateService;
 	
 	@PostMapping("/me")
-	public ResponseEntity<ApiResponse> updateOwnProfile(@RequestBody UpdateUserRequest request) {	
+	public ResponseEntity<ApiResponse<?>> updateOwnProfile(@RequestBody UpdateUserRequest request) {	
 		return updateService.userUpdate(request);
 	}
 	
 	@PostMapping("/byAdmin")
-	public ResponseEntity<ApiResponse> updateUserByAdmin(@RequestBody UpdateUserByAdminRequest request) {	
+	public ResponseEntity<ApiResponse<?>> updateUserByAdmin(@RequestBody UpdateUserByAdminRequest request) {	
 		return updateService.userUpdateByAdmin(request);
 	}
 	
 	@PostMapping("/me/password")
-	public ResponseEntity<ApiResponse> updatePassword(@RequestBody UpdatePasswordRequest request) {	
+	public ResponseEntity<ApiResponse<?>> updatePassword(@RequestBody UpdatePasswordRequest request) {	
 		return updateService.passwordUpdate(request);
 	}
 	

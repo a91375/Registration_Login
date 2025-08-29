@@ -13,14 +13,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import lombok.RequiredArgsConstructor;
 import tw.yen.spring.entity.ConfirmationTokens;
 import tw.yen.spring.entity.UserInfo;
-import tw.yen.spring.payload.request.NewUserRequest;
+import tw.yen.spring.payload.request.AddUserRequest;
 import tw.yen.spring.repository.UserInfoRepository;
 import tw.yen.spring.security.CustomUserDetails;
 import tw.yen.spring.security.enums.Role;
 
 @Service
 @RequiredArgsConstructor
-public class NewUserService {
+public class AddUserService {
 	private final PasswordEncoder passwordEncoder;
 	private final UserInfoService userService;
 	private final EmailService emailService;
@@ -29,7 +29,7 @@ public class NewUserService {
 	
 	
 	@Transactional
-	public String newUser(@RequestBody NewUserRequest request) {
+	public String newUser(@RequestBody AddUserRequest request) {
 		if (userService.userExists(request.getUEmail())) {
 			throw new IllegalStateException("此信箱已使用");
 		}

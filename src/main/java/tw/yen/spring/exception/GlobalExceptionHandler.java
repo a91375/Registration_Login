@@ -11,12 +11,13 @@ import tw.yen.spring.payload.response.ApiResponse;
 public class GlobalExceptionHandler {
 	
 	@ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<ApiResponse> handleIllegalException(NotFoundException ex) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ApiResponse<?>> handleIllegalException(NotFoundException ex) {
+        return ResponseEntity
+        		.status(HttpStatus.BAD_REQUEST)
                 .body(ApiResponse.error(ex.getMessage()));
     }
 	@ExceptionHandler(PasswordUpdateException.class)
-    public ResponseEntity<ApiResponse> handleIllegalException(PasswordUpdateException ex) {
+    public ResponseEntity<ApiResponse<?>> handleIllegalException(PasswordUpdateException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(ApiResponse.error(ex.getMessage()));
     }
