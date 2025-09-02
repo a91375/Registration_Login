@@ -1,5 +1,6 @@
 package tw.yen.spring.service;
 
+
 import org.springframework.stereotype.Service;
 
 import tw.yen.spring.entity.UserInfo;
@@ -9,13 +10,12 @@ import tw.yen.spring.repository.UserInfoRepository;
 public class UserInfoService {
 
 	private final UserInfoRepository userRespository;
-	// private String encodedPassword;
 	
 	public UserInfoService(UserInfoRepository userRespository) {
 		this.userRespository = userRespository;
 	}
 	
-	boolean userExists(String uEmail) {
+	public boolean userExists(String uEmail) {
 		return userRespository.findByUEmail(uEmail).isPresent();
 	}
 	
@@ -29,5 +29,6 @@ public class UserInfoService {
 	public void updateCompanyId(String email, Long cId) {
 		userRespository.updateCompanyId(email, cId);
 	}
+	
 	
 }

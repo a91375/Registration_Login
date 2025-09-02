@@ -1,6 +1,5 @@
 package tw.yen.spring.payload.response;
 
-import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

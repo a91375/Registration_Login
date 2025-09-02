@@ -24,5 +24,9 @@ public interface UserInfoRepository extends JpaRepository<UserInfo, Long>{
     @Transactional
     @Query(value = "UPDATE UserInfo u SET u.status = 1 WHERE u.uEmail = ?1")
     void enableUser(String email);   // status= 0:待啟用/1:啟用/2:停用
-
+	
+	@Modifying
+    @Transactional
+    @Query(value = "UPDATE UserInfo u SET u.uPassword = :password WHERE u.uEmail = :email")
+	void resetPassword(@Param("password") String password,@Param("email") String email);
 }

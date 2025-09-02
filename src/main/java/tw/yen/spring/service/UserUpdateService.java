@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import tw.yen.spring.entity.UserInfo;
 import tw.yen.spring.exception.NotFoundException;
 import tw.yen.spring.exception.PasswordUpdateException;
+import tw.yen.spring.payload.request.ResetPasswordRequest;
 import tw.yen.spring.payload.request.UpdatePasswordRequest;
 import tw.yen.spring.payload.request.UpdateUserByAdminRequest;
 import tw.yen.spring.payload.request.UpdateUserRequest;
@@ -28,6 +29,7 @@ public class UserUpdateService {
 	private final UserInfoService userService;
 	private final UserInfoRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
+	private final ConfirmationTokenService confirmationTokenService;
 	
 	
 	@Transactional
@@ -43,7 +45,7 @@ public class UserUpdateService {
 		newUser.setuAccount(request.getUAccount() );
 		newUser.setStatus(request.getStatus());
 		
-		UserInfo savedUser = userService.save(newUser);
+		userService.save(newUser);
 		        
 		return ResponseEntity.ok(ApiResponse.success("資料更新成功！"));
 	}
@@ -60,7 +62,7 @@ public class UserUpdateService {
 		newUser.setRole(role);
 		newUser.setStatus(request.getStatus());
 		
-		UserInfo savedUser = userService.save(newUser);
+		userService.save(newUser);
 		        
 		return ResponseEntity.ok(ApiResponse.success("資料更新成功！"));
 	}
@@ -90,10 +92,26 @@ public class UserUpdateService {
 		}
 		newUser.setuPassword(passwordEncoder.encode(newPassword));
 		
-		UserInfo savedUser = userService.save(newUser);
+		userService.save(newUser);
 		        
 		return ResponseEntity.ok(ApiResponse.success("密碼更新成功！"));
 	}
+	
+	@Transactional
+	public ResponseEntity<ApiResponse<?>> passwordReset(ResetPasswordRequest request) {
 
+		String token = request.getToken();
+	    String newPassword = request.getNewPassword();
+	
+	    Long userId = confirmationTokenService.getToken(token).get().getUserId();
+
+	    UserInfo user = userRepository.findById(userId)
+	    		.orElseThrow(() -> new NotFoundException("找不到使用者"));
+	    
+	    user.setuPassword(passwordEncoder.encode(newPassword));
+		userService.save(user);
+		        
+		return ResponseEntity.ok(ApiResponse.success("密碼更新成功！"));
+	}
 	
 }
